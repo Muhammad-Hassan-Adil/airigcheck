@@ -14,11 +14,25 @@ const ELECTRICITY_RATES = [
   { id: 'custom', label: 'Custom', rate: 0.15 },
 ];
 
-type ComponentType = 'gpu' | 'cpu' | 'storage' | 'mobo';
+const COMMON_CPUS = [
+  { name: 'Intel Core i5-13600K', watts: 125 },
+  { name: 'Intel Core i7-13700K', watts: 125 },
+  { name: 'Intel Core i9-13900K', watts: 253 },
+  { name: 'Intel Core i9-14900K', watts: 253 },
+  { name: 'AMD Ryzen 5 7600X', watts: 105 },
+  { name: 'AMD Ryzen 7 7700X', watts: 105 },
+  { name: 'AMD Ryzen 9 7900X', watts: 170 },
+  { name: 'AMD Ryzen 9 7950X', watts: 170 },
+  { name: 'AMD Ryzen 9 7950X3D', watts: 120 },
+  { name: 'AMD Threadripper 7960X', watts: 350 },
+  { name: 'AMD Threadripper 7980X', watts: 350 },
+  { name: 'Intel Xeon W9-3595X', watts: 500 },
+  { name: 'Custom CPU', watts: 125 },
+];
 
 interface PowerComponent {
   id: string;
-  type: ComponentType;
+  type: 'gpu' | 'cpu';
   name: string;
   watts: number;
   isEstimated?: boolean;
@@ -31,6 +45,8 @@ export const PowerCostCalculator: React.FC = () => {
   
   const [components, setComponents] = useState<PowerComponent[]>([]);
   const [showGpuPicker, setShowGpuPicker] = useState(false);
+  const [showCpuPicker, setShowCpuPicker] = useState(false);
+  const [cpuSearch, setCpuSearch] = useState('');
 
   const getTdpForVram = (vram: number) => {
     if (vram >= 80) return 700;
@@ -58,31 +74,19 @@ export const PowerCostCalculator: React.FC = () => {
     setShowGpuPicker(false);
   };
 
-  const handleAddOther = (type: ComponentType) => {
-    let name = '';
-    let watts = 0;
-    
-    if (type === 'cpu') {
-      name = 'CPU (Custom)';
-      watts = 125;
-    } else if (type === 'storage') {
-      name = 'Storage (Custom)';
-      watts = 10;
-    } else if (type === 'mobo') {
-      name = 'Mobo/Other (Custom)';
-      watts = 50;
-    }
-
+  const handleAddCpu = (cpu: typeof COMMON_CPUS[0]) => {
     setComponents([
       ...components,
       {
-        id: `${type}-${Date.now()}`,
-        type,
-        name,
-        watts,
+        id: `cpu-${Date.now()}`,
+        type: 'cpu',
+        name: cpu.name,
+        watts: cpu.watts,
         isEstimated: false
       }
     ]);
+    setShowCpuPicker(false);
+    setCpuSearch('');
   };
 
   const removeComponent = (id: string) => {
@@ -97,7 +101,9 @@ export const PowerCostCalculator: React.FC = () => {
     ? customRate 
     : ELECTRICITY_RATES.find(r => r.id === rateId)?.rate || 0.12;
 
-  const totalPower = components.reduce((sum, item) => sum + item.watts, 0);
+  const totalPower = components.length > 0 
+    ? components.reduce((sum, item) => sum + item.watts, 0) + 40 
+    : 0;
 
   // Costs (at 100% load during those hours)
   const kw = totalPower / 1000;
@@ -107,7 +113,7 @@ export const PowerCostCalculator: React.FC = () => {
   const costPerYear = costPerDay * 365;
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 overflow-visible">
       <ToolHeader 
         icon={<Zap className="text-amber-500" size={24} />}
         title="Power & Cost Calculator"
@@ -124,24 +130,44 @@ export const PowerCostCalculator: React.FC = () => {
               <button onClick={() => setShowGpuPicker(!showGpuPicker)} className="px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 rounded-md text-sm font-medium hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors flex items-center gap-1">
                 <Plus size={14} /> Add GPU
               </button>
-              <button onClick={() => handleAddOther('cpu')} className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-md text-sm hover:bg-slate-200 dark:hover:bg-slate-700/80 transition-colors flex items-center gap-1">
+              <button onClick={() => setShowCpuPicker(!showCpuPicker)} className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-md text-sm hover:bg-slate-200 dark:hover:bg-slate-700/80 transition-colors flex items-center gap-1">
                 <Plus size={14} /> Add CPU
-              </button>
-              <button onClick={() => handleAddOther('storage')} className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-md text-sm hover:bg-slate-200 dark:hover:bg-slate-700/80 transition-colors flex items-center gap-1">
-                <Plus size={14} /> Add Storage
-              </button>
-              <button onClick={() => handleAddOther('mobo')} className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-md text-sm hover:bg-slate-200 dark:hover:bg-slate-700/80 transition-colors flex items-center gap-1">
-                <Plus size={14} /> Add Mobo/Other
               </button>
             </div>
 
             {showGpuPicker && (
-              <div className="mb-6 p-4 border border-blue-200 dark:border-blue-800 rounded-lg bg-blue-50/50 dark:bg-blue-900/10">
-                <GPUSearchSelector
-                  selectedGpu={null}
-                  onSelect={handleAddGpu}
-                  placeholder="Search and select GPU to add..."
+              <div className="mb-6 p-4 border border-blue-200 dark:border-blue-800 rounded-lg bg-blue-50/50 dark:bg-blue-900/10 relative z-20 overflow-visible">
+                <div className="relative z-10">
+                  <GPUSearchSelector
+                    selectedGpu={null}
+                    onSelect={handleAddGpu}
+                    placeholder="Search and select GPU to add..."
+                  />
+                </div>
+              </div>
+            )}
+            
+            {showCpuPicker && (
+              <div className="mb-6 p-4 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+                <input
+                  type="text"
+                  placeholder="Search CPUs..."
+                  value={cpuSearch}
+                  onChange={(e) => setCpuSearch(e.target.value)}
+                  className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md text-sm text-slate-900 dark:text-white mb-3"
                 />
+                <div className="max-h-48 overflow-y-auto space-y-1">
+                  {COMMON_CPUS.filter(c => c.name.toLowerCase().includes(cpuSearch.toLowerCase())).map(cpu => (
+                    <button
+                      key={cpu.name}
+                      onClick={() => handleAddCpu(cpu)}
+                      className="w-full text-left px-3 py-2 rounded text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 text-slate-700 dark:text-slate-300 flex justify-between"
+                    >
+                      <span>{cpu.name}</span>
+                      <span className="text-slate-500">{cpu.watts}W</span>
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
             
@@ -152,7 +178,7 @@ export const PowerCostCalculator: React.FC = () => {
                 <div key={comp.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-sm p-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg gap-2">
                   <div className="flex items-center gap-2 max-w-[200px] sm:max-w-xs">
                     <span className="text-lg">
-                      {comp.type === 'gpu' ? '🖥' : comp.type === 'cpu' ? '⚙' : comp.type === 'storage' ? '💾' : '🔌'}
+                      {comp.type === 'gpu' ? '🖥' : '⚙'}
                     </span>
                     <span className="text-slate-700 dark:text-slate-300 truncate" title={comp.name}>{comp.name}</span>
                   </div>
@@ -182,6 +208,13 @@ export const PowerCostCalculator: React.FC = () => {
                   </div>
                 </div>
               ))}
+              
+              {components.length > 0 && (
+                <div className="flex justify-between items-center text-sm p-3 bg-slate-100 dark:bg-slate-800/50 border border-dashed border-slate-300 dark:border-slate-700 rounded-lg">
+                  <span className="text-slate-500">🔌 Misc (fans, RAM, storage)</span>
+                  <span className="text-slate-500 font-mono">40W (fixed)</span>
+                </div>
+              )}
               
               {components.length === 0 && (
                 <div className="text-sm text-slate-500 italic p-4 border border-dashed border-slate-300 dark:border-slate-700 rounded-lg text-center">

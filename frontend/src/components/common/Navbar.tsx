@@ -190,6 +190,7 @@ export const Navbar: React.FC = () => {
                 )}
               </button>
             </div>
+
           </nav>
 
           <div className="md:hidden flex items-center gap-2">

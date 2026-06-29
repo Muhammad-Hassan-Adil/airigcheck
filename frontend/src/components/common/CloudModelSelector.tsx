@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../../services/supabaseClient';
 import type { CloudModel } from '../../types/database.types';
@@ -23,6 +23,17 @@ export const CloudModelSelector: React.FC<CloudModelSelectorProps> = ({
 }) => {
   const [search, setSearch] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    if (isOpen) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen]);
 
   const { data: models = [] } = useQuery({
     queryKey: ['cloud-models-all'],
@@ -46,7 +57,7 @@ export const CloudModelSelector: React.FC<CloudModelSelectorProps> = ({
     );
 
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       {label && <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{label}</label>}
       <div className="relative flex items-center w-full">
         <button

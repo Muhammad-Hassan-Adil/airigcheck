@@ -61,7 +61,7 @@ export const PriceHistory: React.FC = () => {
   }, [selectedModel]);
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 overflow-visible">
       <ToolHeader 
         icon={<LineChartIcon className="text-blue-500" size={24} />}
         title="Price History"
@@ -69,13 +69,15 @@ export const PriceHistory: React.FC = () => {
         tip="Prices tend to drop 40-60% every 6-12 months for major models — check before signing long-term contracts."
       />
       
-      <div className="flex flex-col gap-4 mb-8 max-w-md mx-auto relative z-20">
-        <CloudModelSelector 
-          label="Select Model"
-          selectedModel={selectedModel}
-          onSelect={setSelectedModel}
-          allowClear={true}
-        />
+      <div className="flex flex-col gap-4 mb-8 max-w-md mx-auto relative z-20 overflow-visible">
+        <div className="relative z-10">
+          <CloudModelSelector 
+            label="Select Model"
+            selectedModel={selectedModel}
+            onSelect={setSelectedModel}
+            allowClear={true}
+          />
+        </div>
       </div>
 
       <div className="h-80 w-full mt-4 relative z-10">

@@ -6,7 +6,8 @@ import { ProviderFilter } from './ProviderFilter';
 import { estimateTokens } from '../utils/tokenEstimator';
 import { Card } from '../../../components/common/Card';
 import { Slider } from '../../../components/common/Slider';
-import { Search } from 'lucide-react';
+import { Search, Calculator } from 'lucide-react';
+import { ToolHeader } from '../../../components/common/ToolHeader';
 
 export const CostCalculatorTab: React.FC = () => {
   const { 
@@ -36,6 +37,13 @@ export const CostCalculatorTab: React.FC = () => {
 
   return (
     <div className="space-y-8">
+      <ToolHeader
+        icon={<Calculator className="text-emerald-500" size={24} />}
+        title="API Cost Calculator"
+        description="Calculate and compare exact API costs across all major AI providers. Paste your prompt to estimate token counts, or set them manually."
+        tip="Enable 'Batch API' in modifiers for a 50% discount — ideal for offline processing workloads."
+      />
+
       {/* 1. Token Input Fields */}
       <Card className="p-6 space-y-6 bg-white dark:bg-slate-900">
         <h3 className="text-lg font-semibold text-slate-800 dark:text-white">Token Estimation</h3>

@@ -50,7 +50,7 @@ export const BatchVsRealtime: React.FC = () => {
   const displayCosts = selectedCosts || { realtimeMonthly: 0, batchMonthly: 0, savings: 0 };
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 overflow-visible">
       <ToolHeader 
         icon={<Clock className="text-blue-500" size={24} />}
         title="Batch vs Realtime Savings"
@@ -59,13 +59,15 @@ export const BatchVsRealtime: React.FC = () => {
       />
       
       <div className="mb-8">
-        <div className="max-w-md">
-          <CloudModelSelector 
-            label="Filter by model (optional)"
-            selectedModel={selectedModel}
-            onSelect={setSelectedModel}
-            allowClear={true}
-          />
+        <div className="max-w-md relative z-20 overflow-visible">
+          <div className="relative z-10">
+            <CloudModelSelector 
+              label="Filter by model (optional)"
+              selectedModel={selectedModel}
+              onSelect={setSelectedModel}
+              allowClear={true}
+            />
+          </div>
         </div>
       </div>
 

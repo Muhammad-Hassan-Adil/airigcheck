@@ -29,90 +29,44 @@ export const UpgradePlanner: React.FC = () => {
     return res.estimatedTokensPerSecond;
   };
 
-  const getEstimatedCost = (gpu: GPU) => {
-    if (gpu.vram_gb <= 8) return 300;
-    if (gpu.vram_gb <= 12) return 500;
-    if (gpu.vram_gb <= 16) return 800;
-    if (gpu.vram_gb <= 24) return 1500;
-    if (gpu.vram_gb <= 48) return 4000;
-    return 12000;
-  };
-
   const currentParams = selectedGpu ? calculateMaxParams(selectedGpu.vram_gb) : 0;
   const currentSpeed = selectedGpu ? getSpeedForParams(selectedGpu.vram_gb, selectedGpu.memory_bandwidth_gb_s || 400, currentParams) : 0;
+
+  const UPGRADE_LADDER = [
+    { vram: 8,  name: 'RTX 4060 Ti (8GB)',   bw: 288,  costLabel: '~$350-450' },
+    { vram: 12, name: 'RTX 3060 (12GB)',      bw: 360,  costLabel: '~$250-350' },
+    { vram: 16, name: 'RTX 4060 Ti 16GB',    bw: 288,  costLabel: '~$500-600' },
+    { vram: 20, name: 'RX 7900 GRE (16GB)',  bw: 576,  costLabel: '~$450-550' },
+    { vram: 24, name: 'RTX 4090 (24GB)',      bw: 1008, costLabel: '~$1500-1800' },
+    { vram: 32, name: 'RTX 6000 Ada (48GB)', bw: 960,  costLabel: '~$3500-4500' },
+    { vram: 48, name: 'RTX 6000 Ada (48GB)', bw: 960,  costLabel: '~$3500-4500' },
+    { vram: 80, name: 'A100 80GB',           bw: 2000, costLabel: '~$10,000+' },
+  ];
 
   const roadmap = useMemo(() => {
     if (!selectedGpu) return { step2: null, step3: null };
 
-    const currentCost = getEstimatedCost(selectedGpu);
-    const bw = selectedGpu.memory_bandwidth_gb_s || 400;
+    const currentVram = selectedGpu.vram_gb;
     
-    let step2;
-    let step3;
+    // Find next GPU in ladder above current VRAM
+    const step2Gpu = UPGRADE_LADDER.find(g => g.vram > currentVram);
+    // Find the one after that
+    const step3Gpu = step2Gpu 
+      ? UPGRADE_LADDER.find(g => g.vram > step2Gpu.vram) 
+      : null;
 
-    if (selectedGpu.vram_gb < 16) {
-      step2 = {
-        name: `2x ${selectedGpu.name}`,
-        vram: selectedGpu.vram_gb * 2,
-        bw: bw, // Conservative estimate, assumes limited scaling
-        cost: currentCost,
-        action: 'Add 1x'
-      };
-      step3 = {
-        name: `1x RTX 4090 (24GB)`,
-        vram: 24,
-        bw: 1008,
-        cost: 1600,
-        action: 'Replace with'
-      };
-    } else if (selectedGpu.vram_gb < 24) {
-      step2 = {
-        name: `1x RTX 4090 (24GB)`,
-        vram: 24,
-        bw: 1008,
-        cost: 1600,
-        action: 'Replace with'
-      };
-      step3 = {
-        name: `2x RTX 4090 (48GB)`,
-        vram: 48,
-        bw: 1008,
-        cost: 3200,
-        action: 'Replace with'
-      };
-    } else if (selectedGpu.vram_gb === 24) {
-      step2 = {
-        name: `2x ${selectedGpu.name} (48GB)`,
-        vram: 48,
-        bw: bw,
-        cost: currentCost,
-        action: 'Add 1x'
-      };
-      step3 = {
-        name: `4x ${selectedGpu.name} (96GB)`,
-        vram: 96,
-        bw: bw,
-        cost: currentCost * 3,
-        action: 'Expand to'
-      };
-    } else {
-      step2 = {
-        name: `2x ${selectedGpu.name} (${selectedGpu.vram_gb * 2}GB)`,
-        vram: selectedGpu.vram_gb * 2,
-        bw: bw,
-        cost: currentCost,
-        action: 'Add 1x'
-      };
-      step3 = {
-        name: `Server Node (8x GPU)`,
-        vram: selectedGpu.vram_gb * 8,
-        bw: bw,
-        cost: currentCost * 7,
-        action: 'Expand to'
-      };
-    }
+    const makeStep = (gpu: typeof UPGRADE_LADDER[0]) => ({
+      name: `1x ${gpu.name}`,
+      vram: gpu.vram,
+      bw: gpu.bw,
+      costLabel: gpu.costLabel,
+      action: 'Upgrade to'
+    });
 
-    return { step2, step3 };
+    return {
+      step2: step2Gpu ? makeStep(step2Gpu) : null,
+      step3: step3Gpu ? makeStep(step3Gpu) : null,
+    };
   }, [selectedGpu]);
 
   return (
@@ -126,15 +80,17 @@ export const UpgradePlanner: React.FC = () => {
         />
       </div>
 
-      <Card className="p-6">
-        <div className="max-w-xl mx-auto mb-10">
+      <Card className="p-6 overflow-visible">
+        <div className="max-w-xl mx-auto mb-10 relative z-20 overflow-visible">
           <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4 text-center">Select Your Current GPU</h3>
-          <GPUSearchSelector 
-            label=""
-            selectedGpu={selectedGpu}
-            onSelect={setSelectedGpu}
-            placeholder="Search your current GPU..."
-          />
+          <div className="relative z-10">
+            <GPUSearchSelector 
+              label=""
+              selectedGpu={selectedGpu}
+              onSelect={setSelectedGpu}
+              placeholder="Search your current GPU..."
+            />
+          </div>
         </div>
 
         {selectedGpu && (
@@ -160,7 +116,7 @@ export const UpgradePlanner: React.FC = () => {
               {/* Step 2 */}
               <div className="bg-blue-50/50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800/50 rounded-xl p-6 flex flex-col items-center text-center relative z-10 shadow-sm">
                 <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-base font-bold text-blue-600 dark:text-blue-400 mb-4 ring-4 ring-white dark:ring-slate-950">2</div>
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Next (~${roadmap.step2?.cost})</p>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Next ({roadmap.step2?.costLabel})</p>
                 <p className="font-semibold text-slate-800 dark:text-slate-200 mb-2 h-10 flex items-center justify-center flex-col leading-tight">
                   <span className="text-xs font-normal text-slate-500">{roadmap.step2?.action}</span>
                   {roadmap.step2?.name}
@@ -176,7 +132,7 @@ export const UpgradePlanner: React.FC = () => {
               {/* Step 3 */}
               <div className="bg-indigo-50/50 dark:bg-indigo-900/10 border border-indigo-200 dark:border-indigo-800/50 rounded-xl p-6 flex flex-col items-center text-center relative z-10 shadow-sm">
                 <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-base font-bold text-indigo-600 dark:text-indigo-400 mb-4 ring-4 ring-white dark:ring-slate-950">3</div>
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Future (~${roadmap.step3?.cost})</p>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Future ({roadmap.step3?.costLabel})</p>
                 <p className="font-semibold text-slate-800 dark:text-slate-200 mb-2 h-10 flex items-center justify-center flex-col leading-tight">
                   <span className="text-xs font-normal text-slate-500">{roadmap.step3?.action}</span>
                   {roadmap.step3?.name}

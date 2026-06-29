@@ -3,7 +3,7 @@ import { Card } from '../../../components/common/Card';
 import { Slider } from '../../../components/common/Slider';
 import { useCostCalculator } from '../hooks/useCostCalculator';
 import { ToolHeader } from '../../../components/common/ToolHeader';
-import { Calculator } from 'lucide-react';
+import { Calculator, Plus, X } from 'lucide-react';
 import { CloudModelSelector } from '../../../components/common/CloudModelSelector';
 import type { CloudModel } from '../../../types/database.types';
 
@@ -15,6 +15,21 @@ export const BudgetCalculator: React.FC = () => {
   
   const [viewMode, setViewMode] = useState<'all' | 'single'>('all');
   const [selectedModel, setSelectedModel] = useState<CloudModel | null>(null);
+  
+  const [comparedModels, setComparedModels] = useState<CloudModel[]>([]);
+  const [addingModel, setAddingModel] = useState(false);
+
+  const handleAddModel = (model: CloudModel | null) => {
+    if (!model) return;
+    if (comparedModels.length >= 5) return;
+    if (comparedModels.find(m => m.id === model.id)) return;
+    setComparedModels([...comparedModels, model]);
+    setAddingModel(false);
+  };
+
+  const handleRemoveModel = (id: string) => {
+    setComparedModels(comparedModels.filter(m => m.id !== id));
+  };
 
   const activeModels = models.filter(m => m.is_active);
 
@@ -36,8 +51,6 @@ export const BudgetCalculator: React.FC = () => {
     }).sort((a, b) => b.requests - a.requests);
   }, [activeModels, budget, inputTokens, outputTokens]);
 
-  const topModels = calculatedRequests.filter(m => m.requests > 0).slice(0, 10);
-
   const formatNumber = (num: number) => {
     if (num >= 1000000) {
       return (num / 1000000).toFixed(1) + 'M';
@@ -54,7 +67,7 @@ export const BudgetCalculator: React.FC = () => {
   }, [selectedModel, calculatedRequests]);
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 overflow-visible">
       <ToolHeader 
         icon={<Calculator className="text-blue-500" size={24} />}
         title="Budget Calculator"
@@ -115,40 +128,99 @@ export const BudgetCalculator: React.FC = () => {
       <div className="pt-6 border-t border-slate-200 dark:border-slate-800">
         {viewMode === 'all' ? (
           <>
-            <h4 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Requests within budget</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {topModels.map(m => (
-                <div key={m.id} className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex items-center justify-between group hover:border-blue-300 dark:hover:border-blue-700 transition-colors">
-                  <div className="overflow-hidden pr-2">
-                    <p className="font-semibold text-slate-900 dark:text-white truncate" title={m.friendly_name}>
-                      {m.friendly_name}
-                    </p>
-                    <p className="text-xs text-slate-500">
-                      ${m.costPerRequest < 0.0001 ? '<0.0001' : m.costPerRequest.toFixed(4)} / req
-                    </p>
-                  </div>
-                  <div className="text-right flex-shrink-0">
-                    <p className="text-lg font-bold text-blue-600 dark:text-blue-400">
-                      {formatNumber(m.requests)}
-                    </p>
-                    <p className="text-xs text-slate-400 uppercase tracking-wider">Requests</p>
-                  </div>
-                </div>
-              ))}
-              {topModels.length === 0 && (
-                <div className="col-span-full text-center py-8 text-slate-500">
-                  No models available or budget is too low.
-                </div>
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-sm font-bold text-slate-500 uppercase tracking-wider">Model Comparison</h4>
+              {comparedModels.length < 5 && (
+                <button
+                  onClick={() => setAddingModel(!addingModel)}
+                  className="flex items-center gap-1 px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                >
+                  <Plus size={14} /> Add Model
+                </button>
               )}
             </div>
+
+            {addingModel && (
+              <div className="mb-4">
+                <div className="relative z-10">
+                  <CloudModelSelector
+                    label=""
+                    selectedModel={null}
+                    onSelect={handleAddModel}
+                    excludeIds={comparedModels.map(m => m.id)}
+                    placeholder="Search and add a model..."
+                  />
+                </div>
+              </div>
+            )}
+
+            {comparedModels.length === 0 ? (
+              <div className="text-center py-12 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl text-slate-500">
+                Click "Add Model" to start comparing request budgets across models.
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-slate-200 dark:border-slate-800">
+                      <th className="text-left py-3 px-4 text-slate-500 font-medium">Model</th>
+                      <th className="text-right py-3 px-4 text-slate-500 font-medium">Cost/req</th>
+                      <th className="text-right py-3 px-4 text-slate-500 font-medium">Requests/month</th>
+                      <th className="text-right py-3 px-4 text-slate-500 font-medium">Requests/day</th>
+                      <th className="text-right py-3 px-4 text-slate-500 font-medium">Requests/hour</th>
+                      <th className="py-3 px-4"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {comparedModels.map((model, idx) => {
+                      const inCost = (model.prompt_price_per_1m_usd / 1_000_000) * inputTokens;
+                      const outCost = (model.completion_price_per_1m_usd / 1_000_000) * outputTokens;
+                      const costPerReq = inCost + outCost;
+                      const reqsPerMonth = costPerReq > 0 ? Math.floor(budget / costPerReq) : 0;
+                      const isMax = idx === 0;
+                      return (
+                        <tr key={model.id} className={`border-b border-slate-100 dark:border-slate-800/50 ${isMax ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''}`}>
+                          <td className="py-3 px-4 font-medium text-slate-900 dark:text-white">
+                            {isMax && <span className="mr-2 text-blue-500">★</span>}
+                            {model.friendly_name}
+                          </td>
+                          <td className="py-3 px-4 text-right text-slate-600 dark:text-slate-300 font-mono">
+                            ${costPerReq < 0.0001 ? '<0.0001' : costPerReq.toFixed(4)}
+                          </td>
+                          <td className="py-3 px-4 text-right font-bold text-blue-600 dark:text-blue-400">
+                            {formatNumber(reqsPerMonth)}
+                          </td>
+                          <td className="py-3 px-4 text-right text-slate-600 dark:text-slate-300">
+                            {formatNumber(Math.floor(reqsPerMonth / 30))}
+                          </td>
+                          <td className="py-3 px-4 text-right text-slate-600 dark:text-slate-300">
+                            {formatNumber(Math.floor(reqsPerMonth / (30 * 24)))}
+                          </td>
+                          <td className="py-3 px-4">
+                            <button onClick={() => handleRemoveModel(model.id)} className="text-slate-400 hover:text-red-500 transition-colors">
+                              <X size={14} />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                {comparedModels.length > 0 && (
+                  <p className="text-xs text-slate-400 mt-2">★ Most requests for your budget</p>
+                )}
+              </div>
+            )}
           </>
         ) : (
           <div className="max-w-2xl mx-auto space-y-6">
-            <CloudModelSelector 
-              label="Select a Model"
-              selectedModel={selectedModel}
-              onSelect={setSelectedModel}
-            />
+            <div className="relative z-10">
+              <CloudModelSelector 
+                label="Select a Model"
+                selectedModel={selectedModel}
+                onSelect={setSelectedModel}
+              />
+            </div>
 
             {selectedModelData && (
               <div className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-6 border border-slate-200 dark:border-slate-800 mt-6">

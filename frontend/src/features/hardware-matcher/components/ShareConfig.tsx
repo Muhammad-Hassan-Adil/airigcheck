@@ -98,7 +98,7 @@ export const ShareConfig: React.FC = () => {
   const currentRam = localItems.find(i => i.type === 'ram')?.systemRamGb || 32;
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 overflow-visible">
       <ToolHeader 
         icon={<Share2 className="text-blue-500" size={24} />}
         title="Share Configuration"
@@ -125,12 +125,14 @@ export const ShareConfig: React.FC = () => {
               ))}
               
               {showGpuPicker ? (
-                <div className="p-4 border border-blue-200 dark:border-blue-800 rounded-lg bg-blue-50/50 dark:bg-blue-900/10 mb-4">
+                <div className="p-4 border border-blue-200 dark:border-blue-800 rounded-lg bg-blue-50/50 dark:bg-blue-900/10 mb-4 relative z-20 overflow-visible">
                   <div className="flex justify-between items-center mb-3">
                     <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Select GPU to add:</span>
                     <button onClick={() => setShowGpuPicker(false)} className="text-slate-400 hover:text-slate-600"><X size={16}/></button>
                   </div>
-                  <GPUSearchSelector selectedGpu={null} onSelect={handleAddGpu} />
+                  <div className="relative z-10">
+                    <GPUSearchSelector selectedGpu={null} onSelect={handleAddGpu} />
+                  </div>
                 </div>
               ) : (
                 <button onClick={() => setShowGpuPicker(true)} className="w-full py-2 border border-dashed border-slate-300 dark:border-slate-700 rounded-lg text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-2">

@@ -31,6 +31,7 @@ const BatchVsRealtime = lazy(() => import('./features/cost-calculator/components
 const About = lazy(() => import('./pages/About').then(m => ({ default: m.About })));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy').then(m => ({ default: m.PrivacyPolicy })));
 const TermsOfService = lazy(() => import('./pages/TermsOfService').then(m => ({ default: m.TermsOfService })));
+const Contact = lazy(() => import('./pages/Contact').then(m => ({ default: m.Contact })));
 
 const TAB_TO_PATH: Record<string, string> = {
   'home': '/',
@@ -160,6 +161,7 @@ const App: React.FC = () => {
           <Route path="/about" element={<About />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/contact" element={<Contact />} />
 
           {/* Legacy redirects */}
           <Route path="/hardware/:slug" element={<Navigate to="/hardware-analyzer" replace />} />

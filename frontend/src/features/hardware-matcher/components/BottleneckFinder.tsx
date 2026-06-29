@@ -155,16 +155,18 @@ export const BottleneckFinder: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-6 space-y-6">
+        <Card className="p-6 space-y-6 overflow-visible">
           <h3 className="text-lg font-bold text-slate-900 dark:text-white">Hardware Config</h3>
           
-          <div className="mb-6">
-            <GPUSearchSelector 
-              label="Select GPU to analyze"
-              selectedGpu={selectedGpu}
-              onSelect={handleGpuSelect}
-              placeholder="Search GPUs (e.g. RTX 4090)..."
-            />
+          <div className="mb-6 relative z-20 overflow-visible">
+            <div className="relative z-10">
+              <GPUSearchSelector 
+                label="Select GPU to analyze"
+                selectedGpu={selectedGpu}
+                onSelect={handleGpuSelect}
+                placeholder="Search GPUs (e.g. RTX 4090)..."
+              />
+            </div>
           </div>
 
           <div className="space-y-4">

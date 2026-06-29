@@ -56,7 +56,7 @@ export const ModelComparison: React.FC = () => {
   const cheapestModel = calculatedCosts.find(m => m.totalCost === minCost);
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 overflow-visible">
       <ToolHeader 
         icon={<BarChart2 className="text-blue-500" size={24} />}
         title="Model Comparison"
@@ -70,13 +70,15 @@ export const ModelComparison: React.FC = () => {
             Select models to compare (2-5):
           </label>
           <div className="flex flex-col gap-4">
-            <div className="w-full max-w-sm relative z-20">
-              <CloudModelSelector
-                placeholder={selectedIds.length >= 5 ? "Maximum 5 models selected" : "Search to add model..."}
-                selectedModel={null}
-                onSelect={addModel}
-                excludeIds={selectedIds}
-              />
+            <div className="w-full max-w-sm relative z-20 overflow-visible">
+              <div className="relative z-10">
+                <CloudModelSelector
+                  placeholder={selectedIds.length >= 5 ? "Maximum 5 models selected" : "Search to add model..."}
+                  selectedModel={null}
+                  onSelect={addModel}
+                  excludeIds={selectedIds}
+                />
+              </div>
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
