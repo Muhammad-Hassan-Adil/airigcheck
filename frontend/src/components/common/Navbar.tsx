@@ -32,7 +32,6 @@ const navData = {
     items: [
       { label: 'API Cost Calculator', href: '/cloud-pricing/tool', icon: '💰' },
       { label: 'Compare Models', href: '/cloud-pricing/compare', icon: '📊' },
-      { label: 'Price History', href: '/cloud-pricing/history', icon: '📉' },
       { label: 'Budget Calculator', href: '/cloud-pricing/budget', icon: '🧮' },
       { label: 'Batch vs Realtime', href: '/cloud-pricing/batch', icon: '⚡' },
     ]
@@ -95,7 +94,6 @@ export const Navbar: React.FC = () => {
     if (location.pathname.startsWith('/hardware-analyzer')) return 'matcher';
     if (location.pathname.startsWith('/rig-configurator')) return 'builder';
     if (location.pathname.startsWith('/cloud-pricing')) return 'cloud';
-    if (location.pathname.startsWith('/benchmarks')) return 'benchmarks';
     return 'home';
   };
 
@@ -172,25 +170,6 @@ export const Navbar: React.FC = () => {
                 </div>
               );
             })}
-
-            {/* Benchmarks Tab (No Dropdown) */}
-            <div className="relative">
-              <button 
-                onClick={() => {
-                  navigate('/benchmarks');
-                }}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-1 ${location.pathname.startsWith('/benchmarks') ? 'text-blue-500' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'}`}
-              >
-                Benchmarks
-                {location.pathname.startsWith('/benchmarks') && (
-                  <motion.div 
-                    layoutId="activeTabIndicator"
-                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-blue-500 rounded-t-md" 
-                  />
-                )}
-              </button>
-            </div>
-
           </nav>
 
           <div className="md:hidden flex items-center gap-2">
@@ -199,7 +178,6 @@ export const Navbar: React.FC = () => {
                onChange={(e) => {
                  const val = e.target.value;
                  if (val === 'home') navigate('/');
-                 else if (val === 'benchmarks') navigate('/benchmarks');
                  else navigate(navData[val as TabKey].landing);
                }}
                className="text-sm bg-transparent border border-slate-200 dark:border-slate-700 rounded-md p-1.5 text-slate-700 dark:text-slate-300"
@@ -208,7 +186,6 @@ export const Navbar: React.FC = () => {
                <option value="matcher">Analyzer</option>
                <option value="builder">Configurator</option>
                <option value="cloud">Cloud</option>
-               <option value="benchmarks">Benchmarks</option>
              </select>
           </div>
 

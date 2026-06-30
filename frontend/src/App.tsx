@@ -12,7 +12,6 @@ import { CloudPricingLanding } from './pages/CloudPricingLanding';
 import { HardwareAnalyzerTool } from './features/hardware-matcher/components/HardwareAnalyzerTool';
 import { RigConfiguratorTool } from './features/hardware-matcher/components/RigConfiguratorTool';
 import { CostCalculatorTab } from './features/cost-calculator/components/CostCalculatorTab';
-import { BenchmarksTab } from './features/benchmarks/components/BenchmarksTab';
 
 // Lazy load all feature pages
 const BottleneckFinder = lazy(() => import('./features/hardware-matcher/components/BottleneckFinder').then(m => ({ default: m.BottleneckFinder })));
@@ -24,7 +23,6 @@ const PCIeBandwidthChecker = lazy(() => import('./features/hardware-matcher/comp
 const ShareConfig = lazy(() => import('./features/hardware-matcher/components/ShareConfig').then(m => ({ default: m.ShareConfig })));
 
 const ModelComparison = lazy(() => import('./features/cost-calculator/components/ModelComparison').then(m => ({ default: m.ModelComparison })));
-const PriceHistory = lazy(() => import('./features/cost-calculator/components/PriceHistory').then(m => ({ default: m.PriceHistory })));
 const BudgetCalculator = lazy(() => import('./features/cost-calculator/components/BudgetCalculator').then(m => ({ default: m.BudgetCalculator })));
 const BatchVsRealtime = lazy(() => import('./features/cost-calculator/components/BatchVsRealtime').then(m => ({ default: m.BatchVsRealtime })));
 
@@ -41,7 +39,6 @@ const TAB_TO_PATH: Record<string, string> = {
   'builder-tool': '/rig-configurator/tool',
   'cloud': '/cloud-pricing',
   'cloud-tool': '/cloud-pricing/tool',
-  'benchmarks': '/benchmarks',
 };
 
 const TOOL_TO_PATH: Record<string, Record<string, string>> = {
@@ -57,7 +54,6 @@ const TOOL_TO_PATH: Record<string, Record<string, string>> = {
   },
   'cloud-tool': {
     'compare': '/cloud-pricing/compare',
-    'history': '/cloud-pricing/history',
     'budget': '/cloud-pricing/budget',
     'batch': '/cloud-pricing/batch',
   },
@@ -150,12 +146,8 @@ const App: React.FC = () => {
           <Route path="/cloud-pricing" element={<CloudPricingLanding />} />
           <Route path="/cloud-pricing/tool" element={<CostCalculatorTab />} />
           <Route path="/cloud-pricing/compare" element={<ModelComparison />} />
-          <Route path="/cloud-pricing/history" element={<PriceHistory />} />
           <Route path="/cloud-pricing/budget" element={<BudgetCalculator />} />
           <Route path="/cloud-pricing/batch" element={<BatchVsRealtime />} />
-
-          {/* Benchmarks */}
-          <Route path="/benchmarks" element={<BenchmarksTab />} />
 
           {/* Static pages */}
           <Route path="/about" element={<About />} />
