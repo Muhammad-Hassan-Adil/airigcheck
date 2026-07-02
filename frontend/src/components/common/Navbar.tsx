@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Moon, Sun, ChevronDown } from 'lucide-react';
+import { Moon, Sun, ChevronDown, BookOpen, MessageSquare } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -94,6 +94,8 @@ export const Navbar: React.FC = () => {
     if (location.pathname.startsWith('/hardware-analyzer')) return 'matcher';
     if (location.pathname.startsWith('/rig-configurator')) return 'builder';
     if (location.pathname.startsWith('/cloud-pricing')) return 'cloud';
+    if (location.pathname.startsWith('/guides')) return 'guides';
+    if (location.pathname.startsWith('/forums')) return 'forums';
     return 'home';
   };
 
@@ -170,14 +172,29 @@ export const Navbar: React.FC = () => {
                 </div>
               );
             })}
+
+            <button
+              onClick={() => navigate('/guides')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-1.5 ${location.pathname.startsWith('/guides') ? 'text-blue-500' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'}`}
+            >
+              <BookOpen size={14} /> Guides
+            </button>
+            <button
+              onClick={() => navigate('/forums')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-1.5 ${location.pathname.startsWith('/forums') ? 'text-blue-500' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'}`}
+            >
+              <MessageSquare size={14} /> Forums
+            </button>
           </nav>
 
           <div className="md:hidden flex items-center gap-2">
-             <select 
+             <select
                value={getActiveTabKey()}
                onChange={(e) => {
                  const val = e.target.value;
                  if (val === 'home') navigate('/');
+                 else if (val === 'guides') navigate('/guides');
+                 else if (val === 'forums') navigate('/forums');
                  else navigate(navData[val as TabKey].landing);
                }}
                className="text-sm bg-transparent border border-slate-200 dark:border-slate-700 rounded-md p-1.5 text-slate-700 dark:text-slate-300"
@@ -186,6 +203,8 @@ export const Navbar: React.FC = () => {
                <option value="matcher">Analyzer</option>
                <option value="builder">Configurator</option>
                <option value="cloud">Cloud</option>
+               <option value="guides">Guides</option>
+               <option value="forums">Forums</option>
              </select>
           </div>
 

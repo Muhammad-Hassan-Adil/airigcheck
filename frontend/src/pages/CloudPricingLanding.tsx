@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Calculator, BarChart2, Clock, Battery } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
+import { PageSEO } from '../components/seo/PageSEO';
 
 export const CloudPricingLanding: React.FC = () => {
   const navigate = useNavigate();
@@ -44,19 +44,20 @@ export const CloudPricingLanding: React.FC = () => {
 
   return (
     <div className="max-w-5xl mx-auto space-y-16 py-8">
-      <Helmet>
-        <title>Cloud AI Pricing — Compare API Costs | AIRigCheck</title>
-        <meta name="description" content="Compare API costs across providers. Stop overpaying for token generation." />
-        <link rel="canonical" href="https://airigcheck.com/cloud-pricing" />
-        <script type="application/ld+json">{JSON.stringify({
+      <PageSEO
+        title="Cloud AI Pricing — Compare LLM API Costs | AIRigCheck"
+        description="Compare AI API costs across all major providers in real-time. Find the cheapest LLM for your workload — calculate per-token costs, batch savings, and monthly budgets."
+        canonical="https://airigcheck.com/cloud-pricing"
+        schema={{
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
-          "name": "Cloud AI Pricing",
+          "name": "Cloud AI Pricing Comparator",
           "url": "https://airigcheck.com/cloud-pricing",
-          "description": "Compare API costs across providers. Stop overpaying for token generation.",
-          "applicationCategory": "DeveloperApplication"
-        })}</script>
-      </Helmet>
+          "description": "Compare AI API costs across providers in real-time. Find the cheapest LLM API for your workload.",
+          "applicationCategory": "DeveloperApplication",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        }}
+      />
       <div className="text-center space-y-6">
         <div className="w-20 h-20 bg-emerald-50 dark:bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto">
           <Calculator className="text-emerald-600 dark:text-emerald-400" size={40} />

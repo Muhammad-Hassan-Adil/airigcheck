@@ -5,6 +5,7 @@ import { Zap, X, Plus } from 'lucide-react';
 import { ToolHeader } from '../../../components/common/ToolHeader';
 import { GPUSearchSelector } from '../../../components/common/GPUSearchSelector';
 import type { GPU } from '../../../types/database.types';
+import { PageSEO } from '../../../components/seo/PageSEO';
 
 const ELECTRICITY_RATES = [
   { id: 'us', label: 'US avg', rate: 0.12 },
@@ -114,7 +115,12 @@ export const PowerCostCalculator: React.FC = () => {
 
   return (
     <Card className="p-6 overflow-visible">
-      <ToolHeader 
+      <PageSEO
+        title="AI Rig Power & Electricity Cost Calculator | AIRigCheck"
+        description="Calculate your AI workstation's power consumption and 24/7 electricity running costs. Estimate monthly spend by GPU configuration before committing to hardware."
+        canonical="https://airigcheck.com/rig-configurator/power"
+      />
+      <ToolHeader
         icon={<Zap className="text-amber-500" size={24} />}
         title="Power & Cost Calculator"
         description="Estimate electricity costs for running your AI rig. Add your actual hardware components and set your local electricity rate."

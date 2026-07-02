@@ -5,12 +5,18 @@ import { AutoRecommender } from './AutoRecommender';
 import { useHardwareMatcher } from '../hooks/useHardwareMatcher';
 import { ToolHeader } from '../../../components/common/ToolHeader';
 import { Server } from 'lucide-react';
+import { PageSEO } from '../../../components/seo/PageSEO';
 
 export const RigConfiguratorTool: React.FC = () => {
   const { request: hwRequest, result: hwResult, hardwareItems, addHardwareItem, updateHardwareItem, removeHardwareItem } = useHardwareMatcher();
 
   return (
     <div className="space-y-6">
+      <PageSEO
+        title="Multi-GPU Rig Builder — AI Workstation Configurator | AIRigCheck"
+        description="Design your multi-GPU AI workstation. Mix and match GPUs to calculate total VRAM pool, estimated build cost, and which LLMs you can run."
+        canonical="https://airigcheck.com/rig-configurator/tool"
+      />
       <ToolHeader
         icon={<Server className="text-purple-500" size={24} />}
         title="Rig Builder"

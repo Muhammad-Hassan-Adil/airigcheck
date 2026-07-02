@@ -5,6 +5,7 @@ import { ArrowRight, TrendingUp } from 'lucide-react';
 import { ToolHeader } from '../../../components/common/ToolHeader';
 import { GPUSearchSelector } from '../../../components/common/GPUSearchSelector';
 import type { GPU } from '../../../types/database.types';
+import { PageSEO } from '../../../components/seo/PageSEO';
 
 export const UpgradePlanner: React.FC = () => {
   const [selectedGpu, setSelectedGpu] = useState<GPU | null>(null);
@@ -72,7 +73,12 @@ export const UpgradePlanner: React.FC = () => {
   return (
     <div className="w-full max-w-7xl mx-auto">
       <div className="mb-8">
-        <ToolHeader 
+        <PageSEO
+        title="GPU Upgrade Planner — Cost-Effective AI Hardware | AIRigCheck"
+        description="Find the most cost-effective GPU upgrade path for your AI workload. Compare hardware options and see exact performance gains before committing to a purchase."
+        canonical="https://airigcheck.com/hardware-analyzer/upgrade"
+      />
+      <ToolHeader
           icon={<TrendingUp className="text-emerald-500" size={24} />}
           title="Upgrade Planner"
           description="See exactly what upgrading your current GPU will allow you to run, and the estimated cost to get there."

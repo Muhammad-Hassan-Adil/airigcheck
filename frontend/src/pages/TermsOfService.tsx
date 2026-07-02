@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { PageSEO } from '../components/seo/PageSEO';
 
 export const TermsOfService: React.FC = () => {
   const navigate = useNavigate();
@@ -12,6 +13,11 @@ export const TermsOfService: React.FC = () => {
       transition={{ duration: 0.5 }}
       className="max-w-4xl mx-auto p-6 space-y-6 text-slate-700 dark:text-slate-300"
     >
+      <PageSEO
+        title="Terms of Service | AIRigCheck"
+        description="Read the AIRigCheck Terms of Service. Covers acceptable use, data accuracy disclaimers for hardware estimations and cloud API cost comparisons."
+        canonical="https://airigcheck.com/terms-of-service"
+      />
       <button onClick={() => navigate('/')} className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:underline font-medium cursor-pointer">
         <ArrowLeft size={18} /> Back
       </button>

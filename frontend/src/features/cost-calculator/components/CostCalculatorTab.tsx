@@ -8,6 +8,7 @@ import { Card } from '../../../components/common/Card';
 import { Slider } from '../../../components/common/Slider';
 import { Search, Calculator } from 'lucide-react';
 import { ToolHeader } from '../../../components/common/ToolHeader';
+import { PageSEO } from '../../../components/seo/PageSEO';
 
 export const CostCalculatorTab: React.FC = () => {
   const { 
@@ -37,6 +38,11 @@ export const CostCalculatorTab: React.FC = () => {
 
   return (
     <div className="space-y-8">
+      <PageSEO
+        title="LLM API Cost Calculator — Compare Token Prices | AIRigCheck"
+        description="Calculate and compare LLM API costs across all major providers. Enter your token usage to instantly find the cheapest option for your input and output tokens."
+        canonical="https://airigcheck.com/cloud-pricing/tool"
+      />
       <ToolHeader
         icon={<Calculator className="text-emerald-500" size={24} />}
         title="API Cost Calculator"

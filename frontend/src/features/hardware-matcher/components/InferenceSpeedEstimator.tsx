@@ -7,6 +7,7 @@ import { CheckCircle, AlertTriangle, XCircle, Zap } from 'lucide-react';
 import { ToolHeader } from '../../../components/common/ToolHeader';
 import { GPUSearchSelector } from '../../../components/common/GPUSearchSelector';
 import type { GPU } from '../../../types/database.types';
+import { PageSEO } from '../../../components/seo/PageSEO';
 
 export const InferenceSpeedEstimator: React.FC = () => {
   const [request, setRequest] = useState<HardwareMatchRequest>({
@@ -49,7 +50,12 @@ export const InferenceSpeedEstimator: React.FC = () => {
   return (
     <div className="w-full max-w-7xl mx-auto">
       <div className="mb-8">
-        <ToolHeader 
+        <PageSEO
+        title="LLM Inference Speed Estimator — Tokens per Second | AIRigCheck"
+        description="Estimate how fast your GPU can run any LLM. Calculate tokens per second output based on model size, quantization level, and hardware memory bandwidth."
+        canonical="https://airigcheck.com/hardware-analyzer/speed"
+      />
+      <ToolHeader
           icon={<Zap className="text-amber-500" size={24} />}
           title="Inference Speed Estimator"
           description="Estimate tokens per second (tok/s) across different quantizations for a specific hardware setup."

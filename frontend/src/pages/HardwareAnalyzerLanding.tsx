@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Cpu, Search, Zap, TrendingUp } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
+import { PageSEO } from '../components/seo/PageSEO';
 
 export const HardwareAnalyzerLanding: React.FC = () => {
   const navigate = useNavigate();
@@ -37,19 +37,20 @@ export const HardwareAnalyzerLanding: React.FC = () => {
 
   return (
     <div className="max-w-5xl mx-auto space-y-16 py-8">
-      <Helmet>
-        <title>Hardware Analyzer — Check GPU Compatibility for LLMs | AIRigCheck</title>
-        <meta name="description" content="Check if your GPU can run any LLM. Calculate exact VRAM requirements based on model parameters, quantization level, and context length." />
-        <link rel="canonical" href="https://airigcheck.com/hardware-analyzer" />
-        <script type="application/ld+json">{JSON.stringify({
+      <PageSEO
+        title="Hardware Analyzer — Check GPU Compatibility for LLMs | AIRigCheck"
+        description="Check if your GPU can run any LLM. Calculate exact VRAM requirements for any model based on parameters, quantization level, and context length. Free tool."
+        canonical="https://airigcheck.com/hardware-analyzer"
+        schema={{
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
           "name": "GPU Hardware Analyzer",
           "url": "https://airigcheck.com/hardware-analyzer",
           "description": "Check if your GPU can run any LLM. Calculate VRAM requirements based on model size, quantization, and context length.",
-          "applicationCategory": "DeveloperApplication"
-        })}</script>
-      </Helmet>
+          "applicationCategory": "DeveloperApplication",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        }}
+      />
       <div className="text-center space-y-6">
         <div className="w-20 h-20 bg-blue-50 dark:bg-blue-500/10 rounded-2xl flex items-center justify-center mx-auto">
           <Cpu className="text-blue-600 dark:text-blue-400" size={40} />

@@ -1,32 +1,51 @@
-# React + TypeScript + Vite
+# AIRigCheck
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A toolkit for AI engineers to plan hardware and estimate costs for running LLMs — locally or in the cloud. Calculate VRAM requirements, find bottlenecks, plan GPU upgrades, and compare cloud API pricing across providers.
 
-Currently, two official plugins are available:
+Live app: [airigcheck.com](https://airigcheck.com)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+> This is a sanitized portfolio mirror of the private production codebase — see [PORTFOLIO.md](PORTFOLIO.md) for what's omitted.
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Hardware Analyzer** — check GPU/model compatibility, find bottlenecks, plan upgrade paths, estimate inference speed
+- **Rig Configurator** — build a multi-GPU workstation, check PCIe bandwidth, estimate power cost, share configs
+- **Cloud Pricing** — compare cloud LLM API pricing, budget calculator, batch vs. realtime cost analysis
+- **Guides** — technical write-ups on VRAM calculation, local vs. cloud cost tradeoffs, and GPU buying advice
+- **Forums** — community Q&A and discussion, no account required
 
-## Expanding the Oxlint configuration
+## Tech stack
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+**Frontend**
+- [React 19](https://react.dev) + [TypeScript](https://www.typescriptlang.org)
+- [Vite 8](https://vite.dev) — build tooling
+- [Tailwind CSS 4](https://tailwindcss.com) — styling
+- [React Router](https://reactrouter.com) — routing
+- [Zustand](https://zustand-demo.pmnd.rs) — client state
+- [TanStack Query](https://tanstack.com/query) — server state / data fetching
+- [Framer Motion](https://www.framer.com/motion/) — animation
+- [Recharts](https://recharts.org) — charts
+- [react-helmet-async](https://github.com/staylor/react-helmet-async) — per-page SEO metadata
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+**Backend & infra**
+- [Supabase](https://supabase.com) — Postgres database with row-level security, used directly from the client
+- [Cloudflare Workers](https://workers.cloudflare.com) — API layer (TypeScript, [Zod](https://zod.dev) for validation)
+- [Cloudflare Pages](https://pages.cloudflare.com) — static hosting/deployment
+
+**Tooling**
+- [oxlint](https://oxc.rs) — linting
+- [Playwright](https://playwright.dev) — screenshot generation for this README/portfolio
+
+## Development
+
+```bash
+cd frontend
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+```bash
+npm run build    # type-check + production build
+npm run lint      # oxlint
+npm run preview   # preview the production build
+```

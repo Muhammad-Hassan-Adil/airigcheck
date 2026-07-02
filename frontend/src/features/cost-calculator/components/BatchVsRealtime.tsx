@@ -4,6 +4,7 @@ import { Slider } from '../../../components/common/Slider';
 import { useCostCalculator } from '../hooks/useCostCalculator';
 import { Clock, Zap } from 'lucide-react';
 import { ToolHeader } from '../../../components/common/ToolHeader';
+import { PageSEO } from '../../../components/seo/PageSEO';
 import { CloudModelSelector } from '../../../components/common/CloudModelSelector';
 import type { CloudModel } from '../../../types/database.types';
 
@@ -51,7 +52,12 @@ export const BatchVsRealtime: React.FC = () => {
 
   return (
     <Card className="p-6 overflow-visible">
-      <ToolHeader 
+      <PageSEO
+        title="Batch vs Realtime API Savings Calculator | AIRigCheck"
+        description="Calculate potential savings from using batch API endpoints vs real-time calls. See if asynchronous processing cuts your LLM costs enough to justify the latency."
+        canonical="https://airigcheck.com/cloud-pricing/batch"
+      />
+      <ToolHeader
         icon={<Clock className="text-blue-500" size={24} />}
         title="Batch vs Realtime Savings"
         description="Compare the cost of standard real-time API calls vs asynchronous batch processing. Batch APIs are 50% cheaper but results take up to 24 hours."

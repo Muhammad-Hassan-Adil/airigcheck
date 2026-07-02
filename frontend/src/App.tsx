@@ -31,6 +31,14 @@ const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy').then(m => ({ de
 const TermsOfService = lazy(() => import('./pages/TermsOfService').then(m => ({ default: m.TermsOfService })));
 const Contact = lazy(() => import('./pages/Contact').then(m => ({ default: m.Contact })));
 
+const GuidesIndex = lazy(() => import('./pages/guides/GuidesIndex').then(m => ({ default: m.GuidesIndex })));
+const GuideVRAM = lazy(() => import('./pages/guides/GuideVRAM').then(m => ({ default: m.GuideVRAM })));
+const GuideLocalVsCloud = lazy(() => import('./pages/guides/GuideLocalVsCloud').then(m => ({ default: m.GuideLocalVsCloud })));
+const GuideBestGPUs = lazy(() => import('./pages/guides/GuideBestGPUs').then(m => ({ default: m.GuideBestGPUs })));
+
+const ForumsPage = lazy(() => import('./pages/forums/ForumsPage').then(m => ({ default: m.ForumsPage })));
+const ForumThreadPage = lazy(() => import('./pages/forums/ForumThreadPage').then(m => ({ default: m.ForumThreadPage })));
+
 const TAB_TO_PATH: Record<string, string> = {
   'home': '/',
   'matcher': '/hardware-analyzer',
@@ -154,6 +162,16 @@ const App: React.FC = () => {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/contact" element={<Contact />} />
+
+          {/* Guides */}
+          <Route path="/guides" element={<GuidesIndex />} />
+          <Route path="/guides/vram-calculator-guide" element={<GuideVRAM />} />
+          <Route path="/guides/local-vs-cloud-ai" element={<GuideLocalVsCloud />} />
+          <Route path="/guides/best-gpus-for-llms" element={<GuideBestGPUs />} />
+
+          {/* Forums */}
+          <Route path="/forums" element={<ForumsPage />} />
+          <Route path="/forums/:id" element={<ForumThreadPage />} />
 
           {/* Legacy redirects */}
           <Route path="/hardware/:slug" element={<Navigate to="/hardware-analyzer" replace />} />

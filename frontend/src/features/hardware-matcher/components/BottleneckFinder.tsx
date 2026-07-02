@@ -7,6 +7,7 @@ import { AlertTriangle, CheckCircle, Info, Activity } from 'lucide-react';
 import { ToolHeader } from '../../../components/common/ToolHeader';
 import { GPUSearchSelector } from '../../../components/common/GPUSearchSelector';
 import type { GPU } from '../../../types/database.types';
+import { PageSEO } from '../../../components/seo/PageSEO';
 
 export const BottleneckFinder: React.FC = () => {
   const [request, setRequest] = useState<HardwareMatchRequest>({
@@ -146,7 +147,12 @@ export const BottleneckFinder: React.FC = () => {
   return (
     <div className="w-full max-w-7xl mx-auto">
       <div className="mb-8">
-        <ToolHeader 
+        <PageSEO
+        title="GPU Bottleneck Finder — AI Inference Analyzer | AIRigCheck"
+        description="Find what's limiting your AI inference performance. Analyze memory bandwidth vs compute constraints to identify and fix GPU bottlenecks for LLM workloads."
+        canonical="https://airigcheck.com/hardware-analyzer/bottleneck"
+      />
+      <ToolHeader
           icon={<Activity className="text-purple-500" size={24} />}
           title="Bottleneck Finder"
           description="Analyze your rig against a specific AI model to find performance bottlenecks and get upgrade recommendations."

@@ -3,6 +3,7 @@ import { Card } from '../../../components/common/Card';
 import { useHardwareMatcher } from '../hooks/useHardwareMatcher';
 import { AlertTriangle, CheckCircle, XCircle, ChevronDown, ChevronRight, Activity } from 'lucide-react';
 import { ToolHeader } from '../../../components/common/ToolHeader';
+import { PageSEO } from '../../../components/seo/PageSEO';
 
 const PCIE_BW = {
   3: { 16: 16, 8: 8, 4: 4, 1: 1 },
@@ -33,7 +34,12 @@ export const PCIeBandwidthChecker: React.FC = () => {
 
   return (
     <Card className="p-6">
-      <ToolHeader 
+      <PageSEO
+        title="PCIe Bandwidth Checker — Multi-GPU AI Setup | AIRigCheck"
+        description="Check PCIe bandwidth for your multi-GPU AI rig. Verify your motherboard slot layout supports your planned GPU configuration for optimal inference throughput."
+        canonical="https://airigcheck.com/rig-configurator/pcie"
+      />
+      <ToolHeader
         icon={<Activity className="text-blue-500" size={24} />}
         title="PCIe Bandwidth Checker"
         description="Check if your motherboard's PCIe configuration will bottleneck your multi-GPU setup. Critical for systems with 2+ GPUs."

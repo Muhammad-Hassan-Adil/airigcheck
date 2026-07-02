@@ -6,6 +6,7 @@ import { Card } from '../../../components/common/Card';
 import { Slider } from '../../../components/common/Slider';
 import { CloudModelSelector } from '../../../components/common/CloudModelSelector';
 import { ToolHeader } from '../../../components/common/ToolHeader';
+import { PageSEO } from '../../../components/seo/PageSEO';
 import { BarChart2 } from 'lucide-react';
 
 export const ModelComparison: React.FC = () => {
@@ -57,7 +58,12 @@ export const ModelComparison: React.FC = () => {
 
   return (
     <Card className="p-6 overflow-visible">
-      <ToolHeader 
+      <PageSEO
+        title="AI Model Comparison — Pricing & Cost Breakdown | AIRigCheck"
+        description="Side-by-side comparison of AI model pricing across all providers. Compare cost per million tokens for Claude, GPT, Gemini, Mistral, Llama, and more."
+        canonical="https://airigcheck.com/cloud-pricing/compare"
+      />
+      <ToolHeader
         icon={<BarChart2 className="text-blue-500" size={24} />}
         title="Model Comparison"
         description="Compare costs and specs for multiple AI models side by side. Select 2-5 models to see input cost, output cost, and total cost for your workload."

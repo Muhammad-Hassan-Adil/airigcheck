@@ -8,7 +8,13 @@ export const Footer: React.FC = () => {
         <div className="text-slate-500 dark:text-slate-400 text-sm">
           &copy; {new Date().getFullYear()} AIRigCheck. All rights reserved.
         </div>
-        <nav className="flex gap-6 text-sm font-medium text-slate-600 dark:text-slate-300">
+        <nav className="flex flex-wrap justify-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <Link to="/guides" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+            Guides
+          </Link>
+          <Link to="/forums" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+            Forums
+          </Link>
           <Link to="/about" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             About
           </Link>

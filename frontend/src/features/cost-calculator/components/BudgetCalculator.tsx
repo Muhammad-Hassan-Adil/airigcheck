@@ -3,6 +3,7 @@ import { Card } from '../../../components/common/Card';
 import { Slider } from '../../../components/common/Slider';
 import { useCostCalculator } from '../hooks/useCostCalculator';
 import { ToolHeader } from '../../../components/common/ToolHeader';
+import { PageSEO } from '../../../components/seo/PageSEO';
 import { Calculator, Plus, X } from 'lucide-react';
 import { CloudModelSelector } from '../../../components/common/CloudModelSelector';
 import type { CloudModel } from '../../../types/database.types';
@@ -68,7 +69,12 @@ export const BudgetCalculator: React.FC = () => {
 
   return (
     <Card className="p-6 overflow-visible">
-      <ToolHeader 
+      <PageSEO
+        title="AI API Budget Calculator — Token Volume Estimator | AIRigCheck"
+        description="See how many tokens you can generate on a fixed monthly budget. Compare token volume across all major LLM API providers to find the best value for your spend."
+        canonical="https://airigcheck.com/cloud-pricing/budget"
+      />
+      <ToolHeader
         icon={<Calculator className="text-blue-500" size={24} />}
         title="Budget Calculator"
         description="Work backwards from your budget. Enter how much you can spend and see exactly how many API requests you can afford per model."

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import { PageSEO } from '../components/seo/PageSEO';
 import { Link } from 'react-router-dom';
 import { Mail, Send, CheckCircle, AlertCircle, ArrowLeft } from 'lucide-react';
 import { Card } from '../components/common/Card';
@@ -47,11 +47,11 @@ export const Contact: React.FC = () => {
       transition={{ duration: 0.4 }}
       className="max-w-3xl mx-auto px-4 py-12"
     >
-      <Helmet>
-        <title>Contact Us | AIRigCheck</title>
-        <meta name="description" content="Get in touch with the AIRigCheck team. Questions, feedback, or partnerships — we'd love to hear from you." />
-        <link rel="canonical" href="https://airigcheck.com/contact" />
-      </Helmet>
+      <PageSEO
+        title="Contact Us | AIRigCheck"
+        description="Get in touch with the AIRigCheck team. Questions, feedback, or partnership inquiries — we'll get back to you within two business days."
+        canonical="https://airigcheck.com/contact"
+      />
 
       <Link 
         to="/" 

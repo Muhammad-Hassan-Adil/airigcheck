@@ -6,12 +6,18 @@ import { PerformanceEstimator } from './PerformanceEstimator';
 import { useHardwareMatcher } from '../hooks/useHardwareMatcher';
 import { ToolHeader } from '../../../components/common/ToolHeader';
 import { Cpu } from 'lucide-react';
+import { PageSEO } from '../../../components/seo/PageSEO';
 
 export const HardwareAnalyzerTool: React.FC = () => {
   const { request: hwRequest, updateRequest: updateHwRequest, result: hwResult } = useHardwareMatcher();
 
   return (
     <div className="space-y-6">
+      <PageSEO
+        title="GPU Compatibility Checker — VRAM Calculator | AIRigCheck"
+        description="Check if your GPU has enough VRAM to run any LLM. Input model size, quantization, and context length to get exact memory requirements in real-time."
+        canonical="https://airigcheck.com/hardware-analyzer/tool"
+      />
       <ToolHeader
         icon={<Cpu className="text-blue-500" size={24} />}
         title="GPU Compatibility Checker"

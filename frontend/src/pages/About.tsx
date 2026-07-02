@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { PageSEO } from '../components/seo/PageSEO';
 
 export const About: React.FC = () => {
   const navigate = useNavigate();
@@ -12,10 +13,22 @@ export const About: React.FC = () => {
       transition={{ duration: 0.5 }}
       className="max-w-4xl mx-auto p-6 space-y-6 text-slate-700 dark:text-slate-300"
     >
+      <PageSEO
+        title="About AIRigCheck — AI Infrastructure Toolkit"
+        description="Learn about AIRigCheck, the free toolkit built for AI engineers to calculate GPU VRAM requirements and compare cloud LLM API pricing across providers."
+        canonical="https://airigcheck.com/about"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "AIRigCheck",
+          "url": "https://airigcheck.com",
+          "description": "Free AI infrastructure toolkit for GPU compatibility analysis and cloud API cost comparison."
+        }}
+      />
       <button onClick={() => navigate('/')} className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:underline font-medium cursor-pointer">
         <ArrowLeft size={18} /> Back
       </button>
-      
+
       <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">About Us</h1>
       
       <div className="space-y-4 bg-white dark:bg-slate-900/40 p-8 rounded-2xl backdrop-blur-xl border border-slate-200 dark:border-slate-800 shadow-sm">

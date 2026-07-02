@@ -5,7 +5,7 @@ import { ArrowRight, Cpu, Server, Calculator, CheckCircle2 } from 'lucide-react'
 import { calculateHardwareMatch } from '../features/hardware-matcher/utils/memoryMath';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../services/supabaseClient';
-import { Helmet } from 'react-helmet-async';
+import { PageSEO } from '../components/seo/PageSEO';
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -49,19 +49,20 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-24 pb-24">
-      <Helmet>
-        <title>AIRigCheck — AI Hardware & Cloud Cost Optimizer</title>
-        <meta name="description" content="The ultimate toolkit for AI engineers. Calculate VRAM requirements, build local rigs, and compare cloud API pricing." />
-        <link rel="canonical" href="https://airigcheck.com/" />
-        <script type="application/ld+json">{JSON.stringify({
+      <PageSEO
+        title="AIRigCheck — AI Hardware & Cloud Cost Optimizer"
+        description="The ultimate toolkit for AI engineers. Calculate precise VRAM requirements, build cost-effective local rigs, and compare cloud API pricing in seconds."
+        canonical="https://airigcheck.com/"
+        schema={{
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
-          "name": "AIRigCheck — AI Hardware & Cloud Cost Optimizer",
+          "name": "AIRigCheck",
           "url": "https://airigcheck.com/",
-          "description": "The ultimate toolkit for AI engineers. Calculate VRAM requirements, build local rigs, and compare cloud API pricing.",
-          "applicationCategory": "DeveloperApplication"
-        })}</script>
-      </Helmet>
+          "description": "The ultimate toolkit for AI engineers. Calculate precise VRAM requirements, build cost-effective local rigs, and compare cloud API pricing.",
+          "applicationCategory": "DeveloperApplication",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        }}
+      />
 
       {/* Hero Section */}
       <section className="relative pt-20 pb-32 overflow-hidden">

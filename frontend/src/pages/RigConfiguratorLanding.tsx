@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Server, Wrench, Zap, Link } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
+import { PageSEO } from '../components/seo/PageSEO';
 
 export const RigConfiguratorLanding: React.FC = () => {
   const navigate = useNavigate();
@@ -37,19 +37,20 @@ export const RigConfiguratorLanding: React.FC = () => {
 
   return (
     <div className="max-w-5xl mx-auto space-y-16 py-8">
-      <Helmet>
-        <title>Rig Configurator — Build Your AI Workstation | AIRigCheck</title>
-        <meta name="description" content="Plan your multi-GPU setup. Optimize for PCIe lanes, power delivery, and total cost of ownership." />
-        <link rel="canonical" href="https://airigcheck.com/rig-configurator" />
-        <script type="application/ld+json">{JSON.stringify({
+      <PageSEO
+        title="Rig Configurator — Build Your AI Workstation | AIRigCheck"
+        description="Plan your multi-GPU AI workstation. Mix and match GPUs, optimize PCIe bandwidth and power delivery, and calculate total cost of ownership before you buy."
+        canonical="https://airigcheck.com/rig-configurator"
+        schema={{
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
           "name": "Rig Configurator",
           "url": "https://airigcheck.com/rig-configurator",
           "description": "Plan your multi-GPU setup. Optimize for PCIe lanes, power delivery, and total cost of ownership.",
-          "applicationCategory": "DeveloperApplication"
-        })}</script>
-      </Helmet>
+          "applicationCategory": "DeveloperApplication",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        }}
+      />
       <div className="text-center space-y-6">
         <div className="w-20 h-20 bg-purple-50 dark:bg-purple-500/10 rounded-2xl flex items-center justify-center mx-auto">
           <Server className="text-purple-600 dark:text-purple-400" size={40} />
