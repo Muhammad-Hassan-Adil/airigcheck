@@ -107,7 +107,7 @@ export const Navbar: React.FC = () => {
           onClick={() => { navigate('/'); }}
         >
           <h1 className="text-lg md:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white hover:text-blue-500 transition-colors flex items-center gap-2">
-            <span className="text-xl">⚡</span> AIRigCheck
+            <img src="/favicon-48.png" alt="" width={28} height={28} className="rounded-md" /> AIRigCheck
           </h1>
         </div>
 
